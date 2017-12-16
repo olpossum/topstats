@@ -25,12 +25,19 @@ header= ['date','time','pid','owner','PR','NI','VIRT','RES','SHR', 'S', 'PERC_CP
 
 merged_stats = pd.DataFrame()
 
-stat = pd.read_csv(fpath + '\\' + filename,delim_whitespace=True,names=header)
+#using os, join path and input filename for cross platform compatibility
+fullpath = os.path.join(fpath,filename)
+
+print(fullpath)
+
+stat = pd.read_csv(fullpath,delim_whitespace=True,names=header)
 
 stat['time'] = stat['time'].map(str).apply(lambda x: x[:-1])
 
+
 stat['datetime'] = stat['date'].map(str) + ' ' + stat['time'].map(str)
 
+print(stat.head)
 stat['datetime'] = pd.to_datetime(stat['datetime'],format="%m\%d\%y %H:%M:%S")
 
 
