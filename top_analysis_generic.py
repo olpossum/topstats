@@ -28,24 +28,20 @@ merged_stats = pd.DataFrame()
 #using os, join path and input filename for cross platform compatibility
 fullpath = os.path.join(fpath,filename)
 
-print(fullpath)
-
+#create pandas dataframe from top log
 stat = pd.read_csv(fullpath,delim_whitespace=True,names=header)
 
+#combine time and date and convert into datetime object
 stat['time'] = stat['time'].map(str).apply(lambda x: x[:-1])
-
-
 stat['datetime'] = stat['date'].map(str) + ' ' + stat['time'].map(str)
-
-print(stat.head)
 stat['datetime'] = pd.to_datetime(stat['datetime'],format="%m\%d\%y %H:%M:%S")
-
 
 #statistics calculations below
 cpu_Q1 = stat['PERC_CPU'].quantile(0.25)
 cpu_Q3 = stat['PERC_CPU'].quantile(0.75)
 cpu_IQR = cpu_Q3-cpu_Q1
 
+#print stats summary
 print("\ncpu statistics summary:")
 print(stat['PERC_CPU'].describe())
 print("\nnasd cpu IQR: " + str(cpu_IQR) )
@@ -54,6 +50,7 @@ print("1.5x IQR Filter > " + str(cpu_Q3 + 1.5 * cpu_IQR))
 filtered = stat[stat['PERC_CPU'] > (cpu_Q3 + 1.5 * cpu_IQR)]
 filtered.to_csv("IQR_filter.csv")
 
+#plot CPU and Memory Usage
 fig, (ax,ax1) = plt.subplots(2,sharex=True)
 plt.xticks(rotation=50)
 
