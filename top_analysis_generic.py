@@ -1,3 +1,6 @@
+#Author: Andy Welton
+#Version: 1.0.1
+
 import pandas as pd
 import csv
 import matplotlib as mpl
@@ -42,9 +45,9 @@ cpu_Q3 = stat['PERC_CPU'].quantile(0.75)
 cpu_IQR = cpu_Q3-cpu_Q1
 
 #print stats summary
-print("\ncpu statistics summary:")
+print("\ntop cpu usage statistics summary:")
 print(stat['PERC_CPU'].describe())
-print("\nnasd cpu IQR: " + str(cpu_IQR) )
+print("\ntop cpu usage IQR: " + str(cpu_IQR) )
 print("1.5x IQR Filter > " + str(cpu_Q3 + 1.5 * cpu_IQR))
 
 filtered = stat[stat['PERC_CPU'] > (cpu_Q3 + 1.5 * cpu_IQR)]
